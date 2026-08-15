@@ -134,6 +134,15 @@ export class StationClient {
   }
 
   private handleMessage(msg: any) {
+    if (msg.type === 'STATION_STATE') {
+      if (msg.memberCount !== undefined) {
+        this.updateMemberCount(msg.memberCount);
+      }
+    }
+    if (msg.type === 'MEMBERS_CHANGED') {
+      this.updateMemberCount(msg.count);
+    }
+
     if (msg.type === 'STATION_STATE' || msg.type === 'TRACK_STARTED') {
       const { trackUrl, startedAt } = msg;
 
@@ -394,6 +403,13 @@ export class StationClient {
     const display = document.getElementById('display-track');
     if (display) {
       display.textContent = text;
+    }
+  }
+
+  private updateMemberCount(count: number) {
+    const display = document.getElementById('display-listeners');
+    if (display) {
+      display.textContent = count.toString();
     }
   }
 

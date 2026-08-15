@@ -71,7 +71,10 @@ export function createStationServer(httpServer: Server) {
         ws.send(JSON.stringify({
           type: 'STATION_STATE', theme: station.theme,
           trackUrl: station.trackUrl, startedAt: station.startedAt, serverNow: Date.now(),
+          memberCount: station.members.size
         }));
+        // Broadcast new member count to others
+        broadcast(station, { type: 'MEMBERS_CHANGED', count: station.members.size });
       }
       if (msg.type === 'PLAY_TRACK' && joinedStation) {
         joinedStation.trackUrl = msg.trackUrl;
@@ -82,6 +85,7 @@ export function createStationServer(httpServer: Server) {
         ws.send(JSON.stringify({
           type: 'STATION_STATE', theme: joinedStation.theme,
           trackUrl: joinedStation.trackUrl, startedAt: joinedStation.startedAt, serverNow: Date.now(),
+          memberCount: joinedStation.members.size
         }));
       }
     });
@@ -90,6 +94,7 @@ export function createStationServer(httpServer: Server) {
       if (joinedStation) {
         joinedStation.members.delete(clientId);
         console.log(`[leave] client=${clientId} station="${joinedStation.theme}"`);
+        broadcast(joinedStation, { type: 'MEMBERS_CHANGED', count: joinedStation.members.size });
       }
     });
   });
