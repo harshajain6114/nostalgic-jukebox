@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One Station, Any Vibe — Sync Jukebox</title>
+  <link rel="stylesheet" href="/src/client/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>One Station, Any Vibe</h1>
+      <p class="subtitle">Multi-Device Synchronized Jukebox Station</p>
+    </header>
+
+    <!-- Join/Create Station Card -->
+    <section class="card" id="join-card">
+      <h2 class="card-title">Join a Station</h2>
+      <div class="form-group">
+        <label for="station-theme">Station Name / Theme</label>
+        <input type="text" id="station-theme" placeholder="e.g. ambient-synth, lofi-chill, party-hype" value="vibe-zone">
+      </div>
+      <button id="btn-join">Join Station</button>
+    </section>
+
+    <!-- Active Station Card -->
+    <section class="card hidden" id="station-card">
+      <div class="card-title">
+        <span>Station: <span id="display-station-name" style="color: var(--accent);">—</span></span>
+        <span class="badge badge-warning" id="connection-badge">Connecting</span>
+      </div>
+
+      <div class="status-row">
+        <span class="status-label">Clock Offset</span>
+        <span class="status-value" id="display-offset">Estimating...</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Service Worker</span>
+        <span class="status-value"><span class="badge badge-info" id="sw-badge">Registering...</span></span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Local Time (Synced)</span>
+        <span class="status-value" id="display-synced-time">—</span>
+      </div>
+
+      <!-- Playback Section -->
+      <div class="player-controls">
+        <div class="form-group">
+          <label for="audio-select">Select a Track</label>
+          <div class="audio-select-container">
+            <select id="audio-select">
+              <option value="/audio/synth-wave.wav">Retro Synth Wave (Sample WAV)</option>
+              <option value="/audio/ambient-beat.wav">Lo-Fi Ambient (Sample WAV)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="custom-audio-url">Or paste a custom Audio URL (must support CORS)</label>
+          <input type="text" id="custom-audio-url" placeholder="https://example.com/audio.mp3">
+        </div>
+
+        <div class="grid-2">
+          <button id="btn-play">⚡ Broadcast Play</button>
+          <button id="btn-sync-now" class="button-secondary">🔄 Re-Sync Clock</button>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-bar-bg" id="progress-bar">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+          </div>
+          <div class="time-display">
+            <span id="time-current">00:00</span>
+            <span id="time-total">00:00</span>
+          </div>
+        </div>
+
+        <div class="status-row">
+          <span class="status-label">Now Playing</span>
+          <span class="status-value" id="display-track" style="word-break: break-all; text-align: right;">Idle</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Simulators/Controls -->
+    <section class="card hidden" id="dev-controls-card">
+      <h2 class="card-title">Dev Tools & Connection Simulator</h2>
+      <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        Simulate real-world flaky networks. Toggle offline to cut WebSocket communication, then reconnect to observe automatic client sync-recovery from mid-track.
+      </p>
+      <div class="grid-2">
+        <button id="btn-toggle-connection" class="button-secondary">🔌 Disconnect Socket</button>
+        <button id="btn-leave-station" class="button-secondary" style="border-color: var(--error); color: var(--error);">🚪 Leave Station</button>
+      </div>
+    </section>
+
+    <!-- Terminal/Log Outputs -->
+    <section class="card">
+      <h2 class="card-title" style="font-size: 1rem; margin-bottom: 0.5rem;">Event & Sync Console Log</h2>
+      <div class="log-panel" id="log-panel">
+        <div class="log-entry log-info">[info] System initialized. Ready to join.</div>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="/src/client/index.ts"></script>
+</body>
+</html>
